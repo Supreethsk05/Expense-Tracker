@@ -2,6 +2,7 @@ const mongoose =require('mongoose')
 const bcrypt = require('bcryptjs');
 const { use } = require('../routes/userRoutes');
 
+
 const userSchema =mongoose.Schema({
     name :{
         type: String,
@@ -21,6 +22,7 @@ const userSchema =mongoose.Schema({
         required:true,
         default:false,
     },
+  
 
 
 
