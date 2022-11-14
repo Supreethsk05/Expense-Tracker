@@ -1,44 +1,34 @@
 import { Button,Col,Form,Row } from "react-bootstrap";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { Loading } from "../../components/Loading/Loading";
-import { useEffect } from "react";
 import { ErrorMessage } from "../../components/ErrorMessage/ErrorMessage";
 import MainScreen from "../../components/MainScreen/MainScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { loginuser } from "../../actions/userActions";
 //import './LoginScreen.css'
 
 export const LoginScreen = ({history}) => {
         const [email, setemail] = useState("")
         const [password, setpassword] = useState("")
-        const [error, seterror] = useState(false)
-        const [loading, setLoading] = useState(false)
+        const dispatch=useDispatch()
+
+        const userLogin= useSelector(state=>state.userLogin)
+        const {loading,error,userInfo}=userLogin
+
+        useEffect(()=>{
+
+            if(userInfo){
+                history.push('/mypage')
+            }
+        },[history,userInfo]
+        )
     
         
         const submitHandler = async(e) => {
-            e.preventDefault()
-            // console.log(email,password)
-            try {
-                const config ={
-                    Headers : {
-                        "Content-type":"application/json",
-                    },
-                }
-                setLoading(true)
-                  const {data} =await axios.post("/api/users/login",{
-                    email,
-                    password,
-                    
-                  },
-                  config
-                  )
-                  console.log(data)
-                  localStorage.setItem('userInfo',JSON.stringify(data))
-                setLoading(false)
-            } catch (error) {
-                seterror(error.response.data.message)
-                setLoading(false)
-                
-            }
+    
+          e.preventDefault();
+          dispatch(loginuser(email,password))
+          console.log("HELLO")
         
         }
 

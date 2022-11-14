@@ -37,7 +37,7 @@ const CreateTransaction = asyncHandler(async (req, res) => {
 
     const createdTransaction = await transaction.save();
     if(!createdTransaction){
-        res.json("HELLO")
+        res.json("Transaction added ")
     }
 
     res.status(201).json(createdTransaction);
@@ -57,10 +57,10 @@ const DeleteTransaction = asyncHandler(async (req, res) => {
 
   if (transaction) {
     await transaction.remove();
-    res.json({ message: "Note Removed" });
+    res.json({ message: "Transaction deleted" });
   } else {
     res.status(404);
-    throw new Error("Note not Found");
+    throw new Error("Transaction not found");
   }
 });
 

@@ -4,61 +4,40 @@ import { useState } from 'react'
 import MainScreen from '../../components/MainScreen/MainScreen'
 import {Button,Col,Row} from 'react-bootstrap'
 import { Loading } from '../../components/Loading/Loading'
-import axios from 'axios'
 
 //import './RegisterScreen.css'
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage'
+import { registerUser } from '../../actions/userActions'
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react'
 
-export const RegisterScreen = () => {
+
+
+export const RegisterScreen = ({history}) => {
   const [email, setemail] = useState("")
   const [name, setname] = useState("")
   const [password, setpassword] = useState("")
   const [confirmPassword, setconfirmPassword] = useState("") 
+  const [message, setMessage] = useState(null);
 
-  const[message,setmessage]=useState(null)
+  const dispatch = useDispatch();
 
-  const [loading, setloading] = useState(false)
-  const [error, seterror] = useState(false)
-
-
-  const [fileName, setFileName] = useState("Upload Boundary File");
-
-  const submitHandler = async(e) => {
-    e.preventDefault()
-//    console.log(email)
- seterror(null)
-    console.log(email,password)
-    if(password !== confirmPassword)
-    {
-      setmessage('PASSWORD DO NOT MATCH')
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error, userInfo } = userRegister;
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/");
     }
-    else{
-      setmessage(null)
-   
-        try {
-          const config ={
-              Headers : {
-                  "Content-type":"application/json",
-              },
-          };
-          setloading(true)
-        //  console.log("ll")
-            const {data} =await axios.post("/api/users",
-            {name,email,password}
-            ,
-            config
-            )
-            console.log(data)
-          localStorage.setItem('userInfo',JSON.stringify(data))
-          setloading(false)
-      } catch (error) {
-          seterror(error.response.data.message)
-          setloading(false)
-          
-      }
-      }
+  }, [history, userInfo]);
 
-    }
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+    } else dispatch(registerUser(name, email, password));
+  };
+
    
 
 

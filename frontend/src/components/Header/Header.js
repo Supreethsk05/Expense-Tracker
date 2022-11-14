@@ -7,8 +7,19 @@ import {
   NavDropdown,
   Container,
 } from "react-bootstrap";
+import {useHistory} from 'react-router-dom'
+import {useSelector,useDispatch} from 'react-redux'
+import {logout} from '../../actions/userActions'
 
 const Header = () => {
+  const history = useHistory()
+  const dispatch =useDispatch()
+  const userLogin =useSelector((state)=>state.userLogin)
+  const { userInfo } =userLogin;
+  const logouthandler = () =>{
+   dispatch(logout())
+   history.push("/")
+  }
   return (
     <Navbar bg="primary" expand="lg">
       <Container>
@@ -20,21 +31,24 @@ const Header = () => {
           </Nav.Link>
          
           </Navbar.Brand>
+          <Nav.Link href="/">
+          
+transactions
+          </Nav.Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/mynotes">
-              Transactions
-
-            </Nav.Link> 
-            <Nav.Link href="link">Your Name</Nav.Link>
+          <Nav.Link href="link">Your Name</Nav.Link>
             <NavDropdown title="TOOLS" id="basic-nav-dropdown"  >
               <NavDropdown.Item href="#action/3.1">My profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => {
-             } } href="/" 
+              <NavDropdown.Item onClick={logouthandler
+             } 
              >Log out</NavDropdown.Item>
             </NavDropdown>
+          
+          
+            
           </Nav>
           <Form >
             <FormControl type="text"  placeholder=" Search" className="mr-sm-2" />
