@@ -13,7 +13,7 @@ export const Expenses = () => {
   const [name, setname] = useState("")
   const [method, setmethod] = useState("")
   const [description, setdescription] = useState("")
-  const [amount, setamount] = useState("") 
+  const [amount, setamount] = useState("")
 
   const[message,setmessage]=useState(null)
 
@@ -26,13 +26,17 @@ export const Expenses = () => {
     e.preventDefault()
 //    console.log(email)
  seterror(null)
-    console.log(email,password)
 
       setmessage(null)
    
         try {
+          const userInfo=JSON.parse(localStorage.getItem("userInfo"))
+
           const config ={
               Headers : {
+                Authorization: `Bearer ${userInfo["token"]}`,
+
+
                   "Content-type":"application/json",
               },
           };
@@ -60,7 +64,7 @@ export const Expenses = () => {
 
   return (
 
-    <MainScreen title="REGISTER">
+    <MainScreen title="CREATE TRANSACTION">
     <div className="loginContainer">
   {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
   {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
@@ -69,54 +73,50 @@ export const Expenses = () => {
 
         <Form onSubmit={submitHandler} >
             <Form.Group controlId="formBasicEmail">
-                <Form.Label>name</Form.Label>
-                <Form.Control type="email" 
+                <Form.Label>Name</Form.Label>
+                <Form.Control type="name" 
                 value={name}
                 onChange={(e) => setname(e.target.value)}
-                placeholder="Enter Email"
+                placeholder="Name"
                 >
 
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
-                <Form.Label className='formname'>method</Form.Label>
-                <Form.Control type="password"
+                <Form.Label className='formname'>Method</Form.Label>
+                <Form.Control type="text"
                 className='fieldform'
                 value={method}
                 onChange={(e) => setmethod(e.target.value)}
-                placeholder="Enter Password">
+                placeholder="Method">
 
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId='formBasicPasswordagain'>
-              <Form.Label> description</Form.Label>
-              <Form.Control type="password"
+              <Form.Label> Description</Form.Label>
+              <Form.Control type="text"
               value={description}
               onChange={(e)=> setdescription(e.target.value)}
-              placeholder="confirm password"></Form.Control>
+              placeholder="Description"></Form.Control>
 
             </Form.Group>
             <Form.Group controlId='formBasicName'>
-              <Form.Label >amount</Form.Label>
-              <Form.Control type="name"
+              <Form.Label >Amount</Form.Label>
+              <Form.Control type="float"
               value={amount}
               onChange={(e)=> setamount(e.target.value)}
-              placeholder="Enter your name">
+              placeholder="Amount">
 
               </Form.Control>
             </Form.Group>
          
-            <Button variant="primary" type="submit">
-                REGISTER
+            <Button variant="primary" type="submit" style={{marginTop:"10px"}}>
+                ADD
             </Button>
         </Form>
         </div>
 
-        <Row className="py-3">
-            <Col>
-            Already a user? <a href='/login'>Login</a>
-            </Col>
-        </Row>
+      
     </div>
 </MainScreen>
   )

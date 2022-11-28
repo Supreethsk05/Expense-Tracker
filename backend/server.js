@@ -1,6 +1,5 @@
 const express = require("express"); //import package
 const dotenv = require("dotenv");
-const { get } = require("mongoose");
 const userRoutes=require('./routes/userRoutes')
 const transactionRoutes=require("./routes/transactionRoutes")
 const app = express(); //object of the imported package

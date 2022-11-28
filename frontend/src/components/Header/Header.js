@@ -16,6 +16,7 @@ const Header = () => {
   const dispatch =useDispatch()
   const userLogin =useSelector((state)=>state.userLogin)
   const { userInfo } =userLogin;
+  
   const logouthandler = () =>{
    dispatch(logout())
    history.push("/")
@@ -23,18 +24,22 @@ const Header = () => {
   return (
     <Navbar bg="primary" expand="lg">
       <Container>
-        <Navbar.Brand>
-          <Nav.Link href="/">
-          
-          EXPENSE TRACKER
+      
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <NavDropdown title="Transactions" id="basic-nav-dropdown"  >
+              <NavDropdown.Item href="/mytransactions">View transactions</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item 
+             href="/create"
+             >CreateTransaction</NavDropdown.Item>
+            </NavDropdown>
+            </Nav>
+            </Navbar.Collapse>
 
-          </Nav.Link>
-         
-          </Navbar.Brand>
-          <Nav.Link href="/">
-          
-transactions
-          </Nav.Link>
+
+     
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

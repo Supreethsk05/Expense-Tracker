@@ -8,6 +8,8 @@ import   HomePage  from './screens/HomePage/HomePage';
 import { LoginScreen } from './screens/Login/Login';
 import { RegisterScreen } from './screens/Register/RegisterScreen';
 import { LandingPage } from './screens/LandingPage/LandingPage';
+import { Expenses } from './screens/Expenses/Expenses';
+import { MyTransactions } from './screens/Mytransactions/Mytransactions';
 
 
 const App=()=> (
@@ -19,6 +21,9 @@ const App=()=> (
      <Route path="/login" component={LoginScreen} exact />
      <Route path="/register" component={RegisterScreen} exact />
      <Route path="/mypage" component={LandingPage} exact />
+     <Route path="/create" component={Expenses} exact/>
+     <Route path="/mytransactions" component={MyTransactions} exact />
+
 
      
           
