@@ -2,7 +2,7 @@ import { Accordion ,Badge, Button, Card } from 'react-bootstrap'
 import MainScreen from '../../components/MainScreen/MainScreen';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import  listtransactions  from '../../actions/transactionsAction';
+import  {listtransactions } from '../../actions/transactionsAction';
 import { Loading } from '../../components/Loading/Loading';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 
@@ -12,7 +12,6 @@ export const MyTransactions = () => {
 
     const transactionsList=useSelector(state=>state.transactionsList)
     const {loading,transactions,error}=transactionsList
-
     //const {loading , notes , error} =transactionsList
     useEffect(() => {
       
@@ -31,7 +30,7 @@ export const MyTransactions = () => {
   return (
  <MainScreen title="WELCOME"   ending="THANK YOU">
   <Button style={{marginLeft :10,marginBottom :6}} size="sm">
-UPLOAD DATA  </Button>
+ADD TRANSACTION  </Button>
 {loading&&<Loading />}
 {error && <ErrorMessage />}
   {
@@ -54,7 +53,7 @@ UPLOAD DATA  </Button>
   cursor:"pointer",
   fontsize:18,}}>
 <Accordion.Header style={{size:3}}>
-  <h2 style={{fontSize:6}}>
+  <h2 style={{fontSize:16}}>
 
 {transaction.name}
 </h2>
@@ -69,7 +68,7 @@ UPLOAD DATA  </Button>
       <div className='cardHeader'>
         
         <Button href={`/note/${transaction._id}`} style={{marginRight:6}} size='sm' >VIEW</Button>
-        <Button className='prov'  size='sm' variant="secondary" style={{marginRight:6}}>PROVENANCE</Button>
+        <Button className='prov'  size='sm' variant="secondary" style={{marginRight:6}}>DELETE</Button>
       </div>
 
 

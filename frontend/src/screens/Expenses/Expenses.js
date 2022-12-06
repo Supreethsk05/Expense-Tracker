@@ -1,62 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Form} from 'react-bootstrap'
 import { useState } from 'react'
 import MainScreen from '../../components/MainScreen/MainScreen'
-import {Button,Col,Row} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 import { Loading } from '../../components/Loading/Loading'
-import axios from 'axios'
-
-//import './RegisterScreen.css'
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage'
+import { useDispatch, useSelector } from 'react-redux'
+import { createTransactionAction } from '../../actions/transactionsAction'
 
-export const Expenses = () => {
+export const Expenses = (history) => {
   const [name, setname] = useState("")
   const [method, setmethod] = useState("")
   const [description, setdescription] = useState("")
   const [amount, setamount] = useState("")
 
-  const[message,setmessage]=useState(null)
 
-  const [loading, setloading] = useState(false)
-  const [error, seterror] = useState(false)
-
+  
+  const dispatch = useDispatch();
 
 
-  const submitHandler = async(e) => {
-    e.preventDefault()
-//    console.log(email)
- seterror(null)
 
-      setmessage(null)
-   
-        try {
-          const userInfo=JSON.parse(localStorage.getItem("userInfo"))
+  const transactionCreate = useSelector((state) => state.transactionCreate);
+  const { loading,transaction, error } = transactionCreate;
+  console.log(transaction)
+  
+  useEffect(() => {
+    
+  }, []);
+  const submitHandler = (e) => {
+    e.preventDefault();
+    dispatch(createTransactionAction(name, method, amount,description));
+    if (!name || !method || !amount) return;
 
-          const config ={
-              Headers : {
-                Authorization: `Bearer ${userInfo["token"]}`,
-
-
-                  "Content-type":"application/json",
-              },
-          };
-          setloading(true)
-        //  console.log("ll")
-            const {data} =await axios.post("/api/transaction/create",
-            {name,method,description,amount}
-            ,
-            config
-            )
-            console.log(data)
-          localStorage.setItem('transaction added',JSON.stringify(data))
-          setloading(false)
-      } catch (error) {
-          seterror(error.response.data.message)
-          setloading(false)
-          
-      }
-      }
-
+  };
     
    
 
@@ -67,8 +43,8 @@ export const Expenses = () => {
     <MainScreen title="CREATE TRANSACTION">
     <div className="loginContainer">
   {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-  {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
   {loading && <Loading />}
+  
       <div className='FormReg'>
 
         <Form onSubmit={submitHandler} >
