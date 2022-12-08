@@ -48,8 +48,9 @@ const CreateTransaction = asyncHandler(async (req, res) => {
 //@route           GET /api/notes/:id
 //@access          Private
 const DeleteTransaction = asyncHandler(async (req, res) => {
-  const transaction = await Transaction.findById(req.params.id);
+  console.log(req.params.id)
 
+  const transaction = await Transaction.findById(req.params.id);
   if (transaction.user.toString() !== req.user._id.toString()) {
     res.status(401);
     throw new Error("You can't perform this action");

@@ -7,6 +7,7 @@ import {
   NavDropdown,
   Container,
 } from "react-bootstrap";
+import { useEffect } from "react";
 import {useHistory} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
 import {logout} from '../../actions/userActions'
@@ -15,53 +16,57 @@ const Header = () => {
   const history = useHistory()
   const dispatch =useDispatch()
   const userLogin =useSelector((state)=>state.userLogin)
-  const { userInfo } =userLogin;
+  const  userInfo  = localStorage.getItem("userInfo");
+  const data1=JSON.parse(userInfo)
+  useEffect(() => {}, [userInfo]);
+
   
-  const logouthandler = () =>{
+  const logoutHandler = () =>{
    dispatch(logout())
    history.push("/")
   }
   return (
-    <Navbar bg="primary" expand="lg">
-      <Container>
-      
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <NavDropdown title="Transactions" id="basic-nav-dropdown"  >
-              <NavDropdown.Item href="/mytransactions">View transactions</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item 
-             href="/create"
-             >CreateTransaction</NavDropdown.Item>
-            </NavDropdown>
-            </Nav>
-            </Navbar.Collapse>
+    <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+    <Container>
+      <Navbar.Brand href="/mypage">EXPENSE TRACKER</Navbar.Brand>
 
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        
+        <Nav>
+          {userInfo ? (
+            <>
+              <Nav.Link href="/mytransactions">My transaction</Nav.Link>
+              <NavDropdown
+                title={`${data1["name"]}`}
+                id="collasible-nav-dropdown"
+              >
+                <NavDropdown.Item href="/profile">
+                  {/* <img
+                    alt=""
+                    src={`${userInfo.pic}`}
+                    width="25"
+                    height="25"
+                    style={{ marginRight: 10 }}
+                  /> */}
+                  My Profile
+                </NavDropdown.Item>
 
-     
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-          <Nav.Link href="link">Your Name</Nav.Link>
-            <NavDropdown title="TOOLS" id="basic-nav-dropdown"  >
-              <NavDropdown.Item href="#action/3.1">My profile</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={logouthandler
-             } 
-             >Log out</NavDropdown.Item>
-            </NavDropdown>
-          
-          
-            
-          </Nav>
-          <Form >
-            <FormControl type="text"  placeholder=" Search" className="mr-sm-2" />
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
-};
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={logoutHandler}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            </>
+          ) :(
+            <Nav.Link href="/login">Login</Nav.Link>
+          )}
+        </Nav>
+      </Navbar.Collapse>
+    </Container>
+  </Navbar>
+);
+}
+
 
 export default Header;

@@ -1,102 +1,145 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import MainScreen from "../../components/MainScreen";
-import { Button, Card, Form } from "react-bootstrap";
+import "./ProfileScreen.css";
 import { useDispatch, useSelector } from "react-redux";
-import { createNoteAction } from "../../actions/notesActions";
+import { updateProfile } from "../../actions/userActions";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
-import ReactMarkdown from "react-markdown";
 
-function CreateNote({ history }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
+const ProfileScreen = ({ location, history }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [pic, setPic] = useState();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [picMessage, setPicMessage] = useState();
 
-  const dispatch = useDispatch();
+  
 
-  const noteCreate = useSelector((state) => state.noteCreate);
-  const { loading, error, note } = noteCreate;
+  const userUpdate = useSelector((state) => state.userUpdate);
+  const { loading, error, success } = userUpdate;
 
-  console.log(note);
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/");
+    } else {
+      setName(userInfo.name);
+      setEmail(userInfo.email);
+      setPic(userInfo.pic);
+    }
+  }, [history, userInfo]);
 
-  const resetHandler = () => {
-    setTitle("");
-    setCategory("");
-    setContent("");
+  const postDetails = (pics) => {
+    setPicMessage(null);
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "notezipper");
+      data.append("cloud_name", "piyushproj");
+      fetch("https://api.cloudinary.com/v1_1/piyushproj/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(pic);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      return setPicMessage("Please Select an Image");
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createNoteAction(title, content, category));
-    if (!title || !content || !category) return;
 
-    resetHandler();
-    history.push("/mynotes");
+    dispatch(updateProfile({ name, email, password, pic }));
   };
 
-  useEffect(() => {}, []);
-
   return (
-    <MainScreen title="Create a Note">
-      <Card>
-        <Card.Header>Create a new Note</Card.Header>
-        <Card.Body>
-          <Form onSubmit={submitHandler}>
-            {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="title"
-                value={title}
-                placeholder="Enter the title"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="content">
-              <Form.Label>Content</Form.Label>
-              <Form.Control
-                as="textarea"
-                value={content}
-                placeholder="Enter the content"
-                rows={4}
-                onChange={(e) => setContent(e.target.value)}
-              />
-            </Form.Group>
-            {content && (
-              <Card>
-                <Card.Header>Note Preview</Card.Header>
-                <Card.Body>
-                  <ReactMarkdown>{content}</ReactMarkdown>
-                </Card.Body>
-              </Card>
-            )}
-
-            <Form.Group controlId="content">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="content"
-                value={category}
-                placeholder="Enter the Category"
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </Form.Group>
-            {loading && <Loading size={50} />}
-            <Button type="submit" variant="primary">
-              Create Note
-            </Button>
-            <Button className="mx-2" onClick={resetHandler} variant="danger">
-              Reset Feilds
-            </Button>
-          </Form>
-        </Card.Body>
-
-        <Card.Footer className="text-muted">
-          Creating on - {new Date().toLocaleDateString()}
-        </Card.Footer>
-      </Card>
+    <MainScreen title="EDIT PROFILE">
+      <div>
+        <Row className="profileContainer">
+          <Col md={6}>
+            <Form onSubmit={submitHandler}>
+              {loading && <Loading />}
+              {success && (
+                <ErrorMessage variant="success">
+                  Updated Successfully
+                </ErrorMessage>
+              )}
+              {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+              <Form.Group controlId="name">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="email">
+                <Form.Label>Email Address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+              <Form.Group controlId="confirmPassword">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                ></Form.Control>
+              </Form.Group>{" "}
+              {picMessage && (
+                <ErrorMessage variant="danger">{picMessage}</ErrorMessage>
+              )}
+              <Form.Group controlId="pic">
+                <Form.Label>Change Profile Picture</Form.Label>
+                <Form.File
+                  onChange={(e) => postDetails(e.target.files[0])}
+                  id="custom-file"
+                  type="image/png"
+                  label="Upload Profile Picture"
+                  custom
+                />
+              </Form.Group>
+              <Button type="submit" varient="primary">
+                Update
+              </Button>
+            </Form>
+          </Col>
+          <Col
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img src={pic} alt={name} className="profilePic" />
+          </Col>
+        </Row>
+      </div>
     </MainScreen>
   );
-}
+};
 
-export default CreateNote;
+export default ProfileScreen;

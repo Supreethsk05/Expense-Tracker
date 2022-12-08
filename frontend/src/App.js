@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React,{useState} from 'react';
 
 import Header from './components/Header/Header';
 import  Footer  from './components/Footer/Footer';
@@ -10,9 +10,12 @@ import { RegisterScreen } from './screens/Register/RegisterScreen';
 import { LandingPage } from './screens/LandingPage/LandingPage';
 import { Expenses } from './screens/Expenses/Expenses';
 import { MyTransactions } from './screens/Mytransactions/Mytransactions';
+import Chart from './screens/Charts/Chart';
+import ProfileScreen from './screens/Profile/Profile';
 
 
 const App=()=> (
+  
 <BrowserRouter>
     <Header />
     <main >
@@ -23,6 +26,10 @@ const App=()=> (
      <Route path="/mypage" component={LandingPage} exact />
      <Route path="/create" component={Expenses} exact/>
      <Route path="/mytransactions" component={MyTransactions} exact />
+     <Route path="/chart" component={Chart} exact />
+     <Route path="/profile" component={ProfileScreen} exact />
+
+
 
 
      

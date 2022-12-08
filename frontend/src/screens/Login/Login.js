@@ -14,13 +14,15 @@ export const LoginScreen = ({history}) => {
 
         const userLogin= useSelector(state=>state.userLogin)
         const {loading,error,userInfo}=userLogin
+        const userdata=localStorage.getItem("userInfo")
+      const data1=JSON.parse(userdata)
 
         useEffect(()=>{
-
-            if(userInfo){
+    
+            if(userdata){
                 history.push('/mypage')
             }
-        },[history,userInfo]
+        },[history,userdata]
         )
     
         
@@ -28,7 +30,6 @@ export const LoginScreen = ({history}) => {
     
           e.preventDefault();
           dispatch(loginuser(email,password))
-          console.log("HELLO")
         
         }
 

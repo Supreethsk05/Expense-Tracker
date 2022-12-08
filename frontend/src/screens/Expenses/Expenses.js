@@ -20,7 +20,7 @@ export const Expenses = (history) => {
 
 
 
-  const transactionCreate = useSelector((state) => state.transactionCreate);
+  const transactionCreate = useSelector((state) => state.transactionCreate || {});
   const { loading,transaction, error } = transactionCreate;
   console.log(transaction)
   
@@ -86,7 +86,7 @@ export const Expenses = (history) => {
               </Form.Control>
             </Form.Group>
          
-            <Button variant="primary" type="submit" style={{marginTop:"10px"}}>
+            <Button variant="primary" type="submit" style={{marginTop:"10px"}} >
                 ADD
             </Button>
         </Form>

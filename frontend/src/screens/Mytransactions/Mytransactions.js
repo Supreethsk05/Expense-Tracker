@@ -2,14 +2,13 @@ import { Accordion ,Badge, Button, Card } from 'react-bootstrap'
 import MainScreen from '../../components/MainScreen/MainScreen';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import  {listtransactions } from '../../actions/transactionsAction';
+import  {deleteTransactionAction, listtransactions } from '../../actions/transactionsAction';
 import { Loading } from '../../components/Loading/Loading';
 import { ErrorMessage } from '../../components/ErrorMessage/ErrorMessage';
 
 export const MyTransactions = () => {
     const dispatch=useDispatch()
     
-
     const transactionsList=useSelector(state=>state.transactionsList)
     const {loading,transactions,error}=transactionsList
     //const {loading , notes , error} =transactionsList
@@ -25,11 +24,24 @@ export const MyTransactions = () => {
   
 
   
-  
+    const transactiondelete = useSelector((state) => state.transactiondelete);
+    const {
+      loading: loadingDelete,
+      error: errorDelete,
+      success: successDelete,
+    } = transactiondelete;
+
+    const deleteHandler = (id) => {
+      console.log(id)
+      if (window.confirm("Are you sure?")) {
+        dispatch(deleteTransactionAction(id));
+
+      }
+    };
   
   return (
  <MainScreen title="WELCOME"   ending="THANK YOU">
-  <Button style={{marginLeft :10,marginBottom :6}} size="sm">
+  <Button style={{marginLeft :10,marginBottom :6}} size="sm" href="/create">
 ADD TRANSACTION  </Button>
 {loading&&<Loading />}
 {error && <ErrorMessage />}
@@ -67,8 +79,7 @@ ADD TRANSACTION  </Button>
 
       <div className='cardHeader'>
         
-        <Button href={`/note/${transaction._id}`} style={{marginRight:6}} size='sm' >VIEW</Button>
-        <Button className='prov'  size='sm' variant="secondary" style={{marginRight:6}}>DELETE</Button>
+        <Button style={{marginRight:6}} size='sm'onClick={()=>deleteHandler(transaction._id)} >DELETE</Button>
       </div>
 
 

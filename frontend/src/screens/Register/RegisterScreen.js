@@ -90,7 +90,7 @@ export const RegisterScreen = ({history}) => {
               </Form.Control>
             </Form.Group>
          
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" className='sbutton'>
                 REGISTER
             </Button>
         </Form>
