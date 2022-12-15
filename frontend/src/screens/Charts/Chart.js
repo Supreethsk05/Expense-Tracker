@@ -18,13 +18,13 @@ const Charts = () => {
   }, [dispatch])
     const [data, setData]= useState({
           
-        series: [44, 55, 13, 43, 22],
+        series: [transactions?.map((transaction=>transaction.amount))],
         options: {
           chart: {
             width: 380,
             type: 'pie',
           },
-          labels: [transactions?.map((transaction=>transaction.id))],
+          labels: [],
           responsive: [{
             breakpoint: 480,
             options: {
@@ -46,11 +46,11 @@ const Charts = () => {
 
   return (
     <div>
-        <Chart options={data?.options} series={data?.series} type="pie" width={380} />
+        <Chart options={data?.options} series={data?.series}  type="pie" width={380} />
         
         </div>
         
   )
 }
 
-export default Charts
+export default Charts;
